@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Happy 1 year, Vicky ❤️♾️</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffeef2;
+    --card: #ffffff;
+    --berry: #8a2750;
+    --text: #4a2335;
+    --pink: #ff8fb1;
+    --lilac: #e9dcff;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    background: var(--bg); color: var(--text);
+    font-family: "Fredoka", system-ui, sans-serif;
+    font-size: 1.25rem; line-height: 1.6; text-align: center;
+  }
+  main { max-width: 30rem; margin: 0 auto; padding: 3rem 1.5rem 5rem; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+  #coeur {
+    font-size: 6rem; line-height: 1; background: none; border: 0; padding: 0; cursor: pointer;
+    animation: beat 1.4s ease-in-out infinite;
+  }
+  @keyframes beat { 0%,100% { transform: scale(1); } 15% { transform: scale(1.14); } 30% { transform: scale(1); } 45% { transform: scale(1.1); } }
+  h1 { color: var(--berry); font-size: clamp(2rem, 8vw, 2.8rem); line-height: 1.15; margin: 1rem 0 2rem; }
+  #btn {
+    font: inherit; font-weight: 600; cursor: pointer;
+    background: var(--berry); color: #fff; border: 0; border-radius: 999px; padding: .85rem 2rem;
+  }
+  #btn:focus-visible, #coeur:focus-visible { outline: 3px solid var(--pink); outline-offset: 4px; }
+  #lines { margin: 1.5rem 0 0; }
+  #lines p { margin: 0 0 1.1rem; opacity: 0; transform: translateY(8px); transition: opacity 1s ease, transform 1s ease; }
+  #lines p.show { opacity: 1; transform: none; }
+  #lines p.fin { color: var(--berry); font-weight: 600; font-size: 1.5rem; line-height: 1.4; margin-top: 1.75rem; }
+  #sign { color: var(--berry); margin-top: 1rem; opacity: 0; transition: opacity 1.2s ease; }
+  #sign.show { opacity: 1; }
+  .float { position: fixed; pointer-events: none; font-size: 1.6rem; animation: up 1.8s ease-out forwards; }
+  @keyframes up { to { transform: translateY(-40vh); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    #coeur, .float { animation: none; }
+    #lines p, #sign { transition: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <button id="coeur" aria-label="Envoyer des coeurs">💗</button>
+  <h1 id="titre"></h1>
+  <button id="btn">Lis-moi 💌</button>
+  <div id="lines" aria-live="polite"></div>
+  <div id="sign"></div>
+</main>
+
+<script>
+// ✏️ MODIFIE SEULEMENT CE BLOC
+const CONFIG = {
+  titre: "Happy 1 year, Vicky ❤️♾️",
+  lignes: [
+    "Ça fait déjà un an nous deux, et franchement, je suis trop heureux de t’avoir dans ma vie. 🥹❤️",
+    "Merci pour tous les petits moments, les fous rires, ton attention et tout l’amour que tu me donnes.",
+    "Franchement, je suis tellement content que nos chemins se soient croisés.",
+    "T’as apporté tellement de bonnes choses dans ma vie sans même t’en rendre compte.",
+    "Avec toi, même les moments les plus simples me rendent heureux, et si y a bien une chose dont je suis sûr, c’est que je veux encore vivre plein de beaux moments avec toi. ❤️🥹",
+    "Je sais pas de quoi demain sera fait, mais j’espère vraiment qu’on aura encore plein de choses à vivre ensemble."
+  ],
+  fin: "Si c’était à refaire, je te choisirais encore, Vicky. Toujours toi. ❤️",
+  signature: ""
+};
+
+const $ = id => document.getElementById(id);
+$("titre").textContent = CONFIG.titre;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function burst() {
+  for (let i = 0; i < 8; i++) {
+    const s = document.createElement("span");
+    s.className = "float";
+    s.textContent = ["💗","💖","💕","✨"][i % 4];
+    s.style.left = (10 + Math.random() * 80) + "vw";
+    s.style.top = (60 + Math.random() * 30) + "vh";
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1900);
+  }
+}
+$("coeur").onclick = burst;
+
+let started = false;
+$("btn").onclick = () => {
+  if (started) return;
+  started = true;
+  $("btn").style.display = "none";
+  const items = CONFIG.lignes.map(t => [t, ""]).concat([[CONFIG.fin, "fin"]]);
+  let t0 = 400;
+  items.forEach(([t, cls]) => {
+    const p = document.createElement("p");
+    p.textContent = t;
+    if (cls) p.className = cls;
+    $("lines").appendChild(p);
+    setTimeout(() => p.classList.add("show"), reduce ? 0 : t0);
+    t0 += 1500 + t.length * 35;
+  });
+  setTimeout(() => {
+    $("sign").textContent = CONFIG.signature;
+    $("sign").classList.add("show");
+    burst();
+  }, reduce ? 0 : t0);
+};
+</script>
+</body>
+</html>
